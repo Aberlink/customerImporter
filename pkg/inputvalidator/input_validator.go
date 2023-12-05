@@ -5,9 +5,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	constants "github.com/Aberlink/customerImporter/pkg/constants"
 )
 
-var sortOptions = []string{"count", "domain"}
+var sortOptions = []string{constants.Count, constants.Domain}
 
 type ValidationError struct {
 	Field string
@@ -40,17 +42,18 @@ func validateSortFlag(flag string) error {
 			return nil
 		}
 	}
-	return &ValidationError{Field: "sortBy", Msg: "Sorting options are 'count', 'domain'"}
+	msg := fmt.Sprintf("Sorting options are '%s', '%s'", constants.Count, constants.Domain)
+	return &ValidationError{Field: "sortBy", Msg: msg}
 }
 
 func ValidateFlags(inputPath, outputPath, sortBy string) error {
-	if err := fileExist(inputPath, "input"); err != nil {
+	if err := fileExist(inputPath, constants.Input); err != nil {
 		return err
 	}
-	if err := csvFile(inputPath, "input"); err != nil {
+	if err := csvFile(inputPath, constants.Input); err != nil {
 		return err
 	}
-	if err := csvFile(outputPath, "output"); err != nil {
+	if err := csvFile(outputPath, constants.Output); err != nil {
 		return err
 	}
 	if err := validateSortFlag(sortBy); err != nil {

@@ -2,23 +2,23 @@ package customerimporter
 
 import (
 	"encoding/csv"
-	"fmt"
 	"io"
 	"os"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func ProcesFile(inputPath string) {
 	file, err := os.Open(inputPath)
 	if err != nil {
-		fmt.Printf("Error opening file: %v\n", err)
-		return
+		log.Fatalf("Error opening file: %v", err)
 	}
 	defer file.Close()
 
 	columnsMap, err := getColumnIndex(file)
 	if err != nil {
-		fmt.Printf("Error when reading header: %v\n", err)
+		log.Fatalf("Error when reading header: %v", err)
 	}
 	if !hasNeededColumns(columnsMap) {
 		return
@@ -47,7 +47,7 @@ func columnIterator(file *os.File, columnsMap map[string]int) {
 
 	reader := csv.NewReader(file)
 	if _, err := reader.Read(); err != nil {
-		fmt.Printf("Error reading CSV: %v\n", err)
+		log.Errorf("Error reading CSV: %v", err)
 	} //skip first line as it is header
 	for {
 		row, err := reader.Read()
@@ -55,7 +55,7 @@ func columnIterator(file *os.File, columnsMap map[string]int) {
 			break
 		}
 		if err != nil {
-			fmt.Printf("Error reading CSV: %v\n", err)
+			log.Errorf("Error reading CSV: %v", err)
 			continue
 		}
 		handleRow(row, columnsMap)
@@ -63,10 +63,11 @@ func columnIterator(file *os.File, columnsMap map[string]int) {
 
 }
 
-func setToFileStart(file *os.File) {
+func setToFileStart(file *os.File) error {
 	if _, err := file.Seek(0, io.SeekStart); err != nil {
-		fmt.Printf("failed to seek the file: %v\n", err)
+		log.Fatalf("failed to seek the file: %v", err)
 	}
+	return nil
 
 }
 
@@ -79,7 +80,7 @@ func hasNeededColumns(columnsMap map[string]int) bool {
 			}
 		}
 		if !hasColumn {
-			fmt.Printf("Column '%s' not found, cant parse data\n", handler)
+			log.Errorf("Column '%s' not found, cant parse data", handler)
 			return false
 		}
 	}

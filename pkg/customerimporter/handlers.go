@@ -1,6 +1,8 @@
 package customerimporter
 
-import "fmt"
+import (
+	log "github.com/sirupsen/logrus"
+)
 
 var handlers = map[string]func(
 	cell string, optionalArgs ...interface{}){
@@ -18,7 +20,7 @@ func handleRow(row []string, columnsMap map[string]int) {
 func handleEmail(email string, optionalArgs ...interface{}) {
 	domain, err := getDomainFromEmail(email)
 	if err != nil {
-		fmt.Printf("Error extracting domain from '%s': %v, skiping\n", email, err)
+		log.Warnf("Failed to extract domain from '%s': %v", email, err)
 		return
 	} else {
 		domainCounts[domain]++

@@ -1,8 +1,10 @@
 package customerimporter
 
 import (
-	"fmt"
 	"sort"
+
+	constants "github.com/Aberlink/customerImporter/pkg/constants"
+	log "github.com/sirupsen/logrus"
 )
 
 var domainCounts = make(map[string]int)
@@ -40,12 +42,13 @@ func sortByDomain(domainCountSlice countSlice) countSlice {
 
 func sortDomains(sortBy string) countSlice {
 	domainCountSlice := mapToSlice(domainCounts)
-	if sortBy == "count" {
+	switch sortBy {
+	case constants.Count:
 		domainCountSlice = sortByCount(domainCountSlice)
-	} else if sortBy == "domain" {
+	case constants.Domain:
 		domainCountSlice = sortByDomain(domainCountSlice)
-	} else {
-		fmt.Printf("Wrong sorting method '%s', returning unsorted", sortBy)
+	default:
+		log.Warnf("Wrong sorting method '%s', returning unsorted", sortBy)
 	}
 	return domainCountSlice
 }

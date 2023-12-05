@@ -4,9 +4,12 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+
+	constants "github.com/Aberlink/customerImporter/pkg/constants"
+	log "github.com/sirupsen/logrus"
 )
 
-var domainsHeader = []string{"domain", "count"}
+var domainsHeader = []string{constants.Domain, constants.Count}
 
 func saveDomainsToCSV(domainCountSlice countSlice, filename string) error {
 	file, err := os.Create(filename)
@@ -25,7 +28,7 @@ func saveDomainsToCSV(domainCountSlice countSlice, filename string) error {
 	for _, pos := range domainCountSlice {
 		row := []string{pos.domain, fmt.Sprintf("%d", pos.count)}
 		if err := writer.Write(row); err != nil {
-			fmt.Printf("Error when saving %v row: %v\n", row, err)
+			log.Warnf("Error when saving %v row: %v", row, err)
 			continue
 		}
 	}
@@ -34,7 +37,7 @@ func saveDomainsToCSV(domainCountSlice countSlice, filename string) error {
 
 func printDomains(domainCountSlice countSlice) {
 	for _, pos := range domainCountSlice {
-		fmt.Printf("Domain: '%s' has '%s' clients.\n", pos.domain, fmt.Sprintf("%d", pos.count))
+		log.Infof("Domain: '%s' has '%s' clients.", pos.domain, fmt.Sprintf("%d", pos.count))
 	}
 
 }
@@ -43,9 +46,9 @@ func OutputDomains(print, save bool, filename, sortBy string) {
 	domainCountSlice := sortDomains(sortBy)
 	if save {
 		if err := saveDomainsToCSV(domainCountSlice, filename); err != nil {
-			fmt.Printf("Error when saving file: %v\n", err)
+			log.Errorf("Error when saving file: %v", err)
 		} else {
-			fmt.Printf("File %s saved\n", filename)
+			log.Infof("File %s saved", filename)
 		}
 	}
 	if print {
