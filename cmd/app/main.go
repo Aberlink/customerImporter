@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 
+	log "github.com/sirupsen/logrus"
+
 	constants "github.com/Aberlink/customerImporter/pkg/constants"
 	ci "github.com/Aberlink/customerImporter/pkg/customerimporter"
-	v "github.com/Aberlink/customerImporter/pkg/inputvalidator"
-	log "github.com/sirupsen/logrus"
 )
 
 var print, save bool
@@ -20,7 +20,7 @@ func main() {
 	flag.StringVar(&outputPath, constants.Output, "sorted_domains.csv", "Output .csv file path.")
 
 	flag.Parse()
-	err := v.ValidateFlags(inputPath, outputPath, sortBy)
+	err := validateFlags(inputPath, outputPath, sortBy)
 	if err != nil {
 		log.Fatal(err)
 	}

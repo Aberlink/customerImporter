@@ -43,7 +43,7 @@ func printDomains(domainCountSlice countSlice) {
 }
 
 func OutputDomains(print, save bool, filename, sortBy string) {
-	domainCountSlice := sortDomains(sortBy)
+	domainCountSlice := sortDomains(sortBy, domainCounts)
 	if save {
 		if err := saveDomainsToCSV(domainCountSlice, filename); err != nil {
 			log.Errorf("Error when saving file: %v", err)

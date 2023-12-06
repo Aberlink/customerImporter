@@ -8,12 +8,12 @@ When in the project directory:
 
 - To run:
     ```bash
-    go run cmd/app/main.go
+    go build ./cmd/app
     ```
 
 - To build:
     ```bash
-    go build cmd/app/main.go
+    go run ./cmd/app
     ./main
     ```
 

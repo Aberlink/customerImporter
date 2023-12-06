@@ -40,7 +40,7 @@ func sortByDomain(domainCountSlice countSlice) countSlice {
 	return domainCountSlice
 }
 
-func sortDomains(sortBy string) countSlice {
+func sortDomains(sortBy string, domainCounts map[string]int) countSlice {
 	domainCountSlice := mapToSlice(domainCounts)
 	switch sortBy {
 	case constants.Count:

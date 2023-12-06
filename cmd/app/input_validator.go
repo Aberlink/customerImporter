@@ -1,4 +1,4 @@
-package inputvalidator
+package main
 
 import (
 	"fmt"
@@ -46,7 +46,7 @@ func validateSortFlag(flag string) error {
 	return &ValidationError{Field: "sortBy", Msg: msg}
 }
 
-func ValidateFlags(inputPath, outputPath, sortBy string) error {
+func validateFlags(inputPath, outputPath, sortBy string) error {
 	if err := fileExist(inputPath, constants.Input); err != nil {
 		return err
 	}
