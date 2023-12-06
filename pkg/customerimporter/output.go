@@ -9,10 +9,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// helper variable that contain header for outputh csv file
+// domainsHeader is a helper variable that contain header for outputh csv file
 var domainsHeader = []string{constants.Domain, constants.Count}
 
-// allows save data about domains and their occurance to csv file. FIrst it
+// saveDomainsToCSV allows save data about domains and their occurance to csv file. FIrst it
 // create new file with provided name, that writes defined header and starts
 // to iterete over countSlice, appending its rows to file. Throws an error if
 // it is not possible to create file or write to it
@@ -40,7 +40,7 @@ func saveDomainsToCSV(domainCountSlice countSlice, filename string) error {
 	return nil
 }
 
-// Iteates over provided countSlice and logs in output row by row, informing
+// printDomains iteates over provided countSlice and logs in output row by row, informing
 // about detected domains and custommers that are using it
 func printDomains(domainCountSlice countSlice) {
 	for _, pos := range domainCountSlice {
@@ -49,7 +49,7 @@ func printDomains(domainCountSlice countSlice) {
 
 }
 
-// based on print and save flags, outputs data collected during file analysis. Filename
+// OutputDomains, based on print and save flags, outputs data collected during file analysis. Filename
 // is name of file that will be saved, sortBy allows to chose way of sorting, (by count
 // or in alphabetic order)
 func OutputDomains(print, save bool, filename, sortBy string) {

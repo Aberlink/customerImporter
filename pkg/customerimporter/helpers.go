@@ -4,7 +4,8 @@ import (
 	"bytes"
 )
 
-// helper buffer to redirect logs output from console to it. Used
+//	LogBuffer is helper buffer to redirect logs output from console to it. Used
+//
 // in testing, to check loging behavior
 type LogBuffer struct {
 	buffer *bytes.Buffer
