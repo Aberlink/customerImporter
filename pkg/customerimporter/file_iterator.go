@@ -11,7 +11,7 @@ import (
 
 // CSVReader is interface to abstract  csv.Reader, usefull when
 // mocking file is needed during testing
-type CSVReader interface {
+type csvReader interface {
 	Read() (record []string, err error)
 }
 
@@ -43,7 +43,7 @@ func ProcesFile(inputPath string) {
 // where key is name of the column and value is its index in the file
 // so for line 'name,email,age' it will output [name:0, email:1, age:2]
 // throws an error if it is not possible to read line
-func getColumnIndex(reader CSVReader) (map[string]int, error) {
+func getColumnIndex(reader csvReader) (map[string]int, error) {
 	var columnsMap = make(map[string]int)
 
 	header, err := reader.Read()
@@ -60,7 +60,7 @@ func getColumnIndex(reader CSVReader) (map[string]int, error) {
 // columnIterator moves over file rows, assuming they are data rows and header was skipped
 // earlier. For each row starts processing of its data by handlers that are defined
 // in [pkg/customerimporter/handlers.go]
-func columnIterator(reader CSVReader, columnsMap map[string]int) {
+func columnIterator(reader csvReader, columnsMap map[string]int) {
 	for {
 		row, err := reader.Read()
 		if err == io.EOF {

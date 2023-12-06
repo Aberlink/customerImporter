@@ -58,7 +58,7 @@ func TestHandleEmail_Failure(t *testing.T) {
 	defer func() {
 		log.SetOutput(os.Stderr)
 	}()
-	log.SetOutput(&LogBuffer{buffer: &buf})
+	log.SetOutput(&logBuffer{buffer: &buf})
 
 	handleEmail(mockEmail)
 
