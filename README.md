@@ -6,15 +6,19 @@ Package `customerimporter` reads from a CSV file and returns a sorted data struc
 
 When in the project directory:
 
-- To run:
-    ```bash
-    go build ./cmd/app
-    ```
-
 - To build:
     ```bash
+    go build -o <file_name> ./cmd/app 
+    ```
+
+- To run:
+    ```bash
     go run ./cmd/app
-    ./main
+    ```
+
+- To run tests:
+    ```bash
+    go test -v ./...
     ```
 
 Flags:
@@ -27,10 +31,6 @@ Flags:
 
 To make the code easy to scale, "handlers" might be defined to deal with each column. So far only 'email' has been added, but to work with other columns, it is enough to extend handlers map in `pkg/handlers.go`. Logic to output additional data might be created as independent code and called inside `cmd/main.go`, so you can extend without editing existing logic.
 
-**TODO:**
-
-- Tests
-- Docs
 
 Further improvements are possible, like:
 
@@ -39,6 +39,4 @@ Further improvements are possible, like:
 - Output invalid domains/emails (separated file?).
 - Add parsing to other columns, like gender or IP.
 
----
 
-Feel free to adjust the formatting according to your preferences!
