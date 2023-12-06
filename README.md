@@ -22,15 +22,15 @@ go test -v ./...
 ```
 
 - Docker:
-    build:
+  build:
 ```bash
 docker build -t customerimporter:latest .
 ```
-    start container (adjust local paths, both files have to exist when container starts):
+start container (adjust local paths, both files have to exist when container starts):
 ```bash
 docker run -d --name customerimporter -v "$(pwd)/customers.csv:/app/customers.csv" -v "$(pwd)/sorted_domains.csv:/app/sorted_domains.csv" customerimporter
 ```
-    enter into container, use ./customerimporter
+enter into container, use `./customerimporter` to execute scripts. 
 ```bash
 docker exec -it customerimporter /bin/bash
 ```
