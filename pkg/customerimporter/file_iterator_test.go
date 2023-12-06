@@ -1,9 +1,24 @@
 package customerimporter
 
 import (
+	"io"
 	"reflect"
 	"testing"
 )
+
+type mockCSVReader struct {
+	data  [][]string
+	index int
+}
+
+func (m *mockCSVReader) Read() (record []string, err error) {
+	if m.index >= len(m.data) {
+		return nil, io.EOF
+	}
+	record = m.data[m.index]
+	m.index++
+	return record, nil
+}
 
 var mockFileContent = [][]string{
 	{"name", "email", "age"},
@@ -35,36 +50,6 @@ func TestColumnIterator(t *testing.T) {
 	mockReader := &mockCSVReader{data: mockFileContent}
 
 	columnIterator(mockReader, mockColumnIndexes)
-}
-
-func TestHasNeededColumnsPass(t *testing.T) {
-	var oldHandlers = handlers
-	handlers = make(map[string]func(cell string, optionalArgs ...interface{}))
-	handlers["email"] = func(cell string, optionalArgs ...interface{}) {}
-
-	defer func() {
-		handlers = oldHandlers
-	}()
-
-	has := hasNeededColumns(mockColumnIndexes)
-	if has == false {
-		t.Errorf("Expected  %v, but got %v", has, false)
-	}
-}
-
-func TestHasNeededColumnsFail(t *testing.T) {
-	var oldHandlers = handlers
-	handlers = make(map[string]func(cell string, optionalArgs ...interface{}))
-	handlers["gender"] = func(cell string, optionalArgs ...interface{}) {}
-
-	defer func() {
-		handlers = oldHandlers
-	}()
-
-	has := hasNeededColumns(mockColumnIndexes)
-	if has == true {
-		t.Errorf("Expected  %v, but got %v", has, false)
-	}
 }
 
 func TestHasNeededColumns(t *testing.T) {

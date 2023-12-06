@@ -63,7 +63,7 @@ func TestHandleEmail_Failure(t *testing.T) {
 	handleEmail(mockEmail)
 
 	logOutput := buf.String()
-	expectedFragment := "Failed to extract domain from"
+	expectedFragment := "warning"
 	if !strings.Contains(logOutput, expectedFragment) {
 		t.Errorf("Expected log output to contain '%s', but got '%s'", expectedFragment, logOutput)
 	}

@@ -2,7 +2,6 @@ package customerimporter
 
 import (
 	"encoding/csv"
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -50,7 +49,6 @@ func getColumnIndex(reader CSVReader) (map[string]int, error) {
 func columnIterator(reader CSVReader, columnsMap map[string]int) {
 	for {
 		row, err := reader.Read()
-		fmt.Println(row)
 		if err == io.EOF {
 			break
 		}

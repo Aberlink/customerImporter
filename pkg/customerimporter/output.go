@@ -11,6 +11,10 @@ import (
 
 var domainsHeader = []string{constants.Domain, constants.Count}
 
+type CSVWriter interface {
+	Read() (record []string, err error)
+}
+
 func saveDomainsToCSV(domainCountSlice countSlice, filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
@@ -44,14 +48,14 @@ func printDomains(domainCountSlice countSlice) {
 
 func OutputDomains(print, save bool, filename, sortBy string) {
 	domainCountSlice := sortDomains(sortBy, domainCounts)
+	if print {
+		printDomains(domainCountSlice)
+	}
 	if save {
 		if err := saveDomainsToCSV(domainCountSlice, filename); err != nil {
 			log.Errorf("Error when saving file: %v", err)
 		} else {
 			log.Infof("File %s saved", filename)
 		}
-	}
-	if print {
-		printDomains(domainCountSlice)
 	}
 }

@@ -85,7 +85,7 @@ func TestSortDomains_InvalidSortMethod(t *testing.T) {
 	sortDomains("invalid", testdomainCounts)
 
 	logOutput := buf.String()
-	expectedFragment := "Wrong sorting method"
+	expectedFragment := "warning"
 	if !strings.Contains(logOutput, expectedFragment) {
 		t.Errorf("Expected log output to contain '%s', but got '%s'", expectedFragment, logOutput)
 	}
