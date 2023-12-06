@@ -7,19 +7,33 @@ Package `customerimporter` reads from a CSV file and returns a sorted data struc
 When in the project directory:
 
 - To build:
-    ```bash
-    go build -o <file_name> ./cmd/app 
-    ```
+```bash
+go build -o <file_name> ./cmd/app 
+```
 
 - To run:
-    ```bash
-    go run ./cmd/app
-    ```
+```bash
+go run ./cmd/app
+```
 
 - To run tests:
-    ```bash
-    go test -v ./...
-    ```
+```bash
+go test -v ./...
+```
+
+- Docker:
+    build:
+```bash
+docker build -t customerimporter:latest .
+```
+    start container (adjust local paths, both files have to exist when container starts):
+```bash
+docker run -d --name customerimporter -v "$(pwd)/customers.csv:/app/customers.csv" -v "$(pwd)/sorted_domains.csv:/app/sorted_domains.csv" customerimporter
+```
+    enter into container, use ./customerimporter
+```bash
+docker exec -it customerimporter /bin/bash
+```
 
 Flags:
 
