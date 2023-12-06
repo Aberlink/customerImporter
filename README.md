@@ -35,6 +35,14 @@ enter into container, use `./customerimporter` to execute scripts.
 docker exec -it customerimporter /bin/bash
 ```
 
+- Docks:
+whole codebase is documented inside code, check dockstrings for details. Public functions
+might be viewed by [GoDoc](https://go.dev/blog/godoc) :
+```bash
+godoc -http=:6060
+```
+
+
 Flags:
 
 - `-input`: Input .csv file path where the first row is a header containing column names. "email" is the only one used so far (default "customers.csv").
