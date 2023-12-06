@@ -9,10 +9,16 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// CSVReader is interface to abstract  csv.Reader, usefull when
+// mocking file is needed during testing
 type CSVReader interface {
 	Read() (record []string, err error)
 }
 
+// Opens file with path provided in inputPath. Builds reader that
+// moves over it line by line. On first iteration data about header
+// is collected and saved, than it moves to proper content. Throws fatal
+// error if it is not possible to open file or read its content
 func ProcesFile(inputPath string) {
 	file, err := os.Open(inputPath)
 	if err != nil {
@@ -32,6 +38,11 @@ func ProcesFile(inputPath string) {
 	columnIterator(reader, columnsMap)
 }
 
+// Reads one line from provided file, assuming this is first one
+// and might be treated as header. Based on that data, cretes map,
+// where key is name of the column and value is its index in the file
+// so for line 'name,email,age' it will output [name:0, email:1, age:2]
+// throws an error if it is not possible to read line
 func getColumnIndex(reader CSVReader) (map[string]int, error) {
 	var columnsMap = make(map[string]int)
 
@@ -46,6 +57,9 @@ func getColumnIndex(reader CSVReader) (map[string]int, error) {
 	return columnsMap, nil
 }
 
+// moves over file rows, assuming they are data rows and header was skipped
+// earlier. For each row starts processing of its data by handlers that are defined
+// in [pkg/customerimporter/handlers.go]
 func columnIterator(reader CSVReader, columnsMap map[string]int) {
 	for {
 		row, err := reader.Read()
@@ -61,6 +75,10 @@ func columnIterator(reader CSVReader, columnsMap map[string]int) {
 
 }
 
+// based on handlers definitions that might be found in [pkg/customerimporter/handlers.go],
+// checks whether provided file contains all columns that handlers waiting for. Comparison is based
+// on names, so for each handler definition there should be column with strictly the same name.
+// If event one column is missing validation is considered as failed
 func hasNeededColumns(columnsMap map[string]int) bool {
 	for handler := range handlers {
 		hasColumn := false

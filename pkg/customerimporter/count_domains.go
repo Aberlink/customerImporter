@@ -1,3 +1,7 @@
+// Package customerimporter provides ability to read CSV files and extract
+// data from it. At current sate it reads file header (first line), and looks
+// for 'email' column there. If found, it counts how many times each domain
+// was spoted, and returns that values as prints or exports to new .csv file
 package customerimporter
 
 import (
@@ -7,13 +11,21 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var domainCounts = make(map[string]int)
-
+// Used to store domains counting, where domain is name of domain and count
+// is amount of how many times it was spotted across examined file. Holding
+// this in this form allow easy sorting before outputting
 type countSlice []struct {
 	domain string
 	count  int
 }
 
+// Used during domains counting, each spoted domain is created as new key, during
+// procesing value is increased each time domain is spoted again
+var domainCounts = make(map[string]int)
+
+// convers map object into slice, where key,value pairs are converted into
+// {key, value} structs and appended to slice. It is helpful when it is
+// needed to sort map content
 func mapToSlice(mapToParse map[string]int) countSlice {
 	var domainCountSlice countSlice
 
@@ -26,13 +38,17 @@ func mapToSlice(mapToParse map[string]int) countSlice {
 	return domainCountSlice
 }
 
-func sortByCount(domainCountSlice countSlice) countSlice {
-	sort.SliceStable(domainCountSlice, func(i, j int) bool {
-		return domainCountSlice[i].count > domainCountSlice[j].count
+// Sorts given countSlice by count values across whole slice.
+// Returns sorted slice
+func sortByCount(countCountSlice countSlice) countSlice {
+	sort.SliceStable(countCountSlice, func(i, j int) bool {
+		return countCountSlice[i].count > countCountSlice[j].count
 	})
-	return domainCountSlice
+	return countCountSlice
 }
 
+// Sorts given countSlice alphabeticaly by domain values across whole slice.
+// Returns sorted slice
 func sortByDomain(domainCountSlice countSlice) countSlice {
 	sort.SliceStable(domainCountSlice, func(i, j int) bool {
 		return (domainCountSlice[i].domain) < domainCountSlice[j].domain
@@ -40,6 +56,10 @@ func sortByDomain(domainCountSlice countSlice) countSlice {
 	return domainCountSlice
 }
 
+// Based on chosen method, performs sorting of mailing data extracted from
+// examined file. Original map is first converted do slice, that is than
+// sorted. Methods declaration can be found in [pkg/constants/constants.go].
+// In case no proper one as been chosen returns unsorted slice and logs warning
 func sortDomains(sortBy string, domainCounts map[string]int) countSlice {
 	domainCountSlice := mapToSlice(domainCounts)
 	switch sortBy {
