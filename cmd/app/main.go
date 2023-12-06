@@ -24,8 +24,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Info("Flags loaded correctly")
 
 	ci.ProcesFile(inputPath)
+	log.Info("File processing finised")
 	ci.OutputDomains(print, save, outputPath, sortBy)
+	log.Info("File analized, exiting")
 
 }
