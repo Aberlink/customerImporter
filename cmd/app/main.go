@@ -15,7 +15,7 @@ var sortBy, inputPath, outputPath string
 func main() {
 	flag.BoolVar(&print, "print", true, "Print program output.")
 	flag.BoolVar(&save, "save", true, "Save program output to .csv file.")
-	flag.StringVar(&sortBy, "sortby", constants.Count, "Choose to sort domains by 'count' or 'domain'.")
+	flag.StringVar(&sortBy, "sortby", constants.Domain, "Choose to sort domains by 'count' or 'domain'.")
 	flag.StringVar(&inputPath, constants.Input, "customers.csv", "Input .csv file path where first row is a header.")
 	flag.StringVar(&outputPath, constants.Output, "sorted_domains.csv", "Output .csv file path.")
 

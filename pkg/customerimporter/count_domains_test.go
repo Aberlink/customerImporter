@@ -17,14 +17,50 @@ var testdomainCounts = map[string]int{
 	"demo.com":    2,
 }
 
+var testCountSlice = countSlice{
+	{"example.com", 3},
+	{"test.com", 1},
+	{"demo.com", 2},
+}
+
+func slicesEqual(slice1, slice2 countSlice) bool {
+	set1 := make(map[struct {
+		domain string
+		count  int
+	}]struct{})
+	set2 := make(map[struct {
+		domain string
+		count  int
+	}]struct{})
+
+	for _, elem := range slice1 {
+		set1[elem] = struct{}{}
+	}
+
+	for _, elem := range slice2 {
+		set2[elem] = struct{}{}
+	}
+
+	return reflect.DeepEqual(set1, set2)
+}
+
+func TestCreateCountSlice(t *testing.T) {
+	result := createCountSlice(testdomainCounts)
+
+	if !slicesEqual(result, testCountSlice) {
+		t.Errorf("Creating countSice failed. Expected %v, got %v", testCountSlice, result)
+	}
+}
+
 func TestSortByCount(t *testing.T) {
+
 	expectedResult := countSlice{
 		{"example.com", 3},
 		{"demo.com", 2},
 		{"test.com", 1},
 	}
-
-	result := sortByCount(mapToSlice(testdomainCounts))
+	result := testCountSlice
+	result.sortByCount()
 
 	if !reflect.DeepEqual(result, expectedResult) {
 		t.Errorf("Sorting by count failed. Expected %v, got %v", expectedResult, result)
@@ -38,7 +74,8 @@ func TestSortByDomain(t *testing.T) {
 		{"test.com", 1},
 	}
 
-	result := sortByDomain(mapToSlice(testdomainCounts))
+	result := testCountSlice
+	result.sortByDomain()
 
 	if !reflect.DeepEqual(result, expectedResult) {
 		t.Errorf("Sorting by domain failed. Expected %v, got %v", expectedResult, result)
